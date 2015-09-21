@@ -1,0 +1,99 @@
+# To compare two vocab C1 and C2 subject to dataset D
+
+```{r} 
+rm(list=ls()); 
+library(nnet); library(ggplot2);
+set.seed(1234);
+
+labelFrame <- function(X, C)
+{
+   rows <- nrow(X);  
+   cols <- ncol(C);
+
+   labels <- 1:rows;
+   dist <- 1:cols;
+
+   for(j in 1:rows) 
+   {
+     for(k in 1:cols) dist[k] <- sum(abs( X[j, ] - C[k, ] ));
+     labels[j] <- which.min(dist);
+   }
+
+   return(labels);
+}
+
+reconstruct <- function(labels, centers) 
+{
+   print(labels);
+  
+  X <- matrix(nrow=length(labels), ncol=ncol(centers));
+
+  for(k in 1:length(labels) ) 
+  {
+    X[k, ] <- as.numeric( centers[labels[k], ] );
+  }
+
+  return( data.frame(X) ); 
+}
+
+```
+
+## 1. We have two vocab C1 and C2
+```{r} 
+C1 <- data.frame(rbind(
+c(123, 0, 0, 0, 3),  
+c(0, 0, 233, 3, 0),  
+c(0, 3, 0, 0, 433)  
+));
+
+print(C1);
+
+C2 <- data.frame(rbind(
+c(121, 0, 0, 0, 0),  
+c(0, 0, 231, 0, 0),  
+c(0, 0, 0, 0, 431)  
+));
+
+print(C2);
+```
+
+## 2. We want to know which one is better subject to dataset D
+```{r} 
+D <- data.frame(rbind(
+c(121, 0, 0, 0, 0),  c(122, 0, 0, 0, 0),
+c(123, 0, 0, 0, 0),  c(124, 0, 0, 0, 0),
+c(125, 0, 0, 0, 0),  c(0, 0, 231, 0, 0),
+c(0, 0, 232, 0, 0),  c(0, 0, 233, 0, 0),
+c(0, 0, 234, 0, 0),  c(0, 0, 235, 0, 0),
+c(0, 0, 0, 0, 432),  c(0, 0, 0, 0, 433),
+c(0, 0, 0, 0, 434),  c(0, 0, 0, 0, 435),
+c(0, 0, 0, 0, 436),  c(0, 0, 0, 0, 437)
+));
+
+print(D); 
+```
+
+
+## 3. We can use the vocab to compress the vectors 
+```{r} 
+compare <- function(A, B) 
+{
+  rows <- nrow(A);
+
+  e <- 1:rows;
+
+  for(k in 1:rows)
+  {
+     e[k] <- sum( abs(A[k, ] - B[k, ]) );
+  }
+
+  print(cbind( A, B, e ));
+  print(data.frame( key="total error", val=sum(e) ));
+}  
+
+L1 <- labelFrame(D, C1); print(L1);
+L2 <- labelFrame(D, C2); print(L2);
+
+compare(D, reconstruct(L1, C1));
+compare(D, reconstruct(L2, C2));
+```

@@ -1,0 +1,94 @@
+# To show how k-means procedure works
+
+```{r} 
+rm(list=ls()); 
+library(nnet); library(ggplot2);
+```
+
+## 1. Labeling step
+```{r} 
+kmeanLabel <- function(X, C)
+{
+   rows <- nrow(X);  
+   cols <- nrow(C);
+
+   labels <- 1:rows;
+   zj <- 1:cols;
+
+   for(j in 1:rows) 
+   { 
+     for(k in 1:cols) zj[k] <- sum(abs( X[j, ] - C[k, ] ));
+     labels[j] <- which.min(zj);
+   }
+
+   return(labels);
+}
+```
+
+## 2. Averaging step
+```{r} 
+kmeanAvg <- function(X, L, kpar)
+{
+   rows <- nrow(X);
+
+   C <- matrix(nrow=kpar, ncol=ncol(X), data=0);
+   N <- rep(0, ncol(X));
+
+   for(j in 1:rows) 
+   {
+     zj <- L[j];
+     C[zj, ] <- C[zj, ] + as.numeric( X[j, ] );
+     N[zj] <- N[zj] + 1;
+   }
+
+   for(k in 1:kpar) if(N[k] > 0) C[k, ] <- C[k, ] / N[k];
+
+   return(C);
+}
+```
+
+## 3. Initializing step
+```{r} 
+kmeanInit <- function(X, kpar)
+{
+   d <- ncol(X);
+
+   C <- matrix(nrow=kpar, ncol=d);
+   for(k in 1:kpar) C[k, ] <- runif(d, 0, 100);
+
+   return(C);
+}
+```
+
+## 4. The whole procedure
+```{r} 
+kmeanProc <- function(X, kpar, ms)
+{
+   C <- kmeanInit(X, kpar);
+   L <- kmeanLabel(X, C);
+
+   for(s in 1:ms)
+   {
+      C <- kmeanAvg(X, L, kpar);   
+      L <- kmeanLabel(X, C);
+   }
+
+   return( list(L, C) );
+}
+```
+
+## 5. An example
+```{r} 
+X <- data.frame(rbind(
+c(121, 0, 0, 0, 0),  c(122, 0, 0, 0, 0),
+c(123, 0, 0, 0, 0),  c(124, 0, 0, 0, 0),
+c(125, 0, 0, 0, 0),  c(0, 0, 231, 0, 0),
+c(0, 0, 232, 0, 0),  c(0, 0, 233, 0, 0),
+c(0, 0, 234, 0, 0),  c(0, 0, 235, 0, 0),
+c(0, 0, 0, 0, 432),  c(0, 0, 0, 0, 433),
+c(0, 0, 0, 0, 434),  c(0, 0, 0, 0, 435),
+c(0, 0, 0, 0, 436),  c(0, 0, 0, 0, 437)
+));
+
+M <- kmeanProc(X, 4, 20);
+```

@@ -1,0 +1,42 @@
+# To show how to mix two probability models
+
+## Preparation
+```{r} 
+rm(list=ls()); 
+library(nnet); library(ggplot2);
+set.seed(1234);
+```
+
+## 1. We generate gausian components
+```{r} 
+x <- 1:50;
+
+a <- 3; b <- 15; p1 <- (x>=a)*(x<=b)/(b-a) + 0*x;
+plot(x, p1, type="l");
+
+a <- 18; b <- 30; p2 <- (x>=a)*(x<=b)/(b-a) + 0*x;
+plot(x, p2, type="l");
+```
+
+
+## 2b. We mix them with equal weights
+```{r} 
+p <- 0.5*p1 + 0.5*p2;
+plot(x, p, type="l");
+```
+
+## 2c. We mix them with equal weights
+```{r} 
+p <- 0.7*p1 + 0.3*p2;
+plot(x, p, type="l");
+```
+
+
+## 2d. We mix them with equal weights
+```{r} 
+p <- 0.1*p1 + 0.9*p2;
+plot(x, p, type="l");
+```
+
+
+

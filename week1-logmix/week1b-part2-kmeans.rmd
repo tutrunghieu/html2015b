@@ -1,0 +1,102 @@
+# To show how to mix two probability models
+
+```{r} 
+rm(list=ls()); 
+library(nnet); library(ggplot2);
+set.seed(1234);
+```
+
+## 1. We have the dataset
+```{r} 
+D <- rbind(
+c(121, 0, 0, 0, 0),  c(122, 0, 0, 0, 0),
+c(123, 0, 0, 0, 0),  c(124, 0, 0, 0, 0),
+c(125, 0, 0, 0, 0),  c(0, 0, 231, 0, 0),
+c(0, 0, 232, 0, 0),  c(0, 0, 233, 0, 0),
+c(0, 0, 234, 0, 0),  c(0, 0, 235, 0, 0),
+c(0, 0, 0, 0, 432),  c(0, 0, 0, 0, 433),
+c(0, 0, 0, 0, 434),  c(0, 0, 0, 0, 435),
+c(0, 0, 0, 0, 436),  c(0, 0, 0, 0, 437)
+);
+D <- data.frame(D);
+print(D); 
+```
+
+## 2. We also have the vocab or the set of centers (means)
+```{r} 
+C <- rbind(
+c(123, 0, 0, 0, 0),  
+c(0, 0, 233, 0, 0),  
+c(0, 0, 0, 0, 433)  
+);
+
+C <- data.frame(C);
+print(C);
+```
+
+## 3. We can use the vocab to compress the vectors 
+```{r} 
+labelOne <- function(x, centers)
+{
+   dist <- 1:nrow(centers);
+
+   for(k in 1:nrow(centers) )
+   { 
+       ck <- centers[k, ];
+       dist[k] <- sum( abs(x-ck) );
+   }
+
+   return( which.min(dist) );
+}
+
+
+labelAll <- function(x, centers)
+{
+   rows <- nrow(x);  
+
+   labels <- 1:rows;
+   for(k in 1:rows) labels[k] <- labelOne(x[k, ], centers);
+
+   return( labels );
+}
+
+L <- labelAll(D, C);
+D1 <- cbind(D, data.frame(labels=L) );
+print(D1);
+```
+
+## 4. We then reconstruct the vectors from labels and centers
+```{r} 
+
+reconstruct <- function(labels, centers) 
+{
+  X <- matrix(nrow=length(labels), ncol=ncol(centers));
+  for(k in 1:length(labels) ) 
+  {
+    X[k, ] <- centers[ labels[k], ];
+  }
+
+  return(data.frame(X) ); 
+}
+
+D2 <- reconstruct(L, C);
+print( D2 );
+```
+
+## 5. We can measure errors (differences)
+```{r} 
+diff <- function(A, B) 
+{
+  rows <- nrow(A);
+  e <- 1:rows;
+  for(k in 1:rows)
+  {
+     e[k] <- sum( abs(A[k, ] - B[k, ]) );
+  }
+
+  return(e);
+}  
+
+print(cbind( D, D2, diff(D, D2) ));
+
+```

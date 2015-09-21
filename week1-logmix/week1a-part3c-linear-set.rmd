@@ -1,0 +1,58 @@
+# To show the concept of linearly separable
+
+## Preparation
+```{r} 
+rm(list=ls()); 
+library(nnet); 
+library(ggplot2);
+set.seed(1234);
+```
+
+## 1. Sometimes, the dataset is linearly separable
+```{r} 
+x <- runif(1000, -10, 10);
+y <- runif(1000, -10, 10);
+z <- ( 2*x + 3*y > 0);
+D <- data.frame(x, y, z);
+
+print( qplot(x, y, color=z) );
+
+```
+
+## 2. We divide the dataset into training set (A) and testing set (B)
+```{r} 
+A <- D[1:4, ]; print(A);
+B <- D[5:7, ]; print(B);
+```
+
+## 3. We test the model y=5x against the dataset
+```{r} 
+M <- function(x) { return(x*x); }
+```
+
+
+## 4a. We test the model M with training set A
+```{r} 
+y <- A[, 2];
+y1 <- M(A[, 1]);
+e1 <- abs(y - y1);
+print( data.frame(y, y1, e1) );
+print( data.frame(key="Training error", val=sum(e1) ));
+```
+
+
+## 4b. We test the model M with testing set B
+```{r} 
+y <- B[, 2];
+y1 <- M( B[, 1] );
+e1 <- abs(y - y1);
+print( data.frame(y, y1, e1) );
+print( data.frame(key="Testing error", val=sum(e1) ));
+```
+
+
+
+
+
+
+

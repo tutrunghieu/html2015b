@@ -1,0 +1,92 @@
+# To show the EM procedure on GMM model
+
+```{r}
+rm(list = ls());
+
+X <- rbind(
+c(121, 0, 0, 0, 0), 
+c(122, 0, 0, 0, 0),
+c(123, 0, 0, 0, 0),
+c(124, 0, 0, 0, 0),
+c(125, 0, 0, 0, 0),
+c(0, 0, 231, 0, 0),
+c(0, 0, 232, 0, 0),
+c(0, 0, 233, 0, 0),
+c(0, 0, 234, 0, 0),
+c(0, 0, 235, 0, 0),
+c(0, 0, 0, 0, 432),
+c(0, 0, 0, 0, 433),
+c(0, 0, 0, 0, 434),
+c(0, 0, 0, 0, 435),
+c(0, 0, 0, 0, 436),
+c(0, 0, 0, 0, 437),
+c(123, 0, 0, 0, 500),
+c(0, 0, 230, 0, 100) 
+);
+
+C <- rbind(
+c(100, 0, 0, 0, 0), 
+c(0, 0, 100, 0, 0),
+c(0, 0, 0, 0, 100) 
+);
+
+
+print(X);
+print(C);
+```
+
+## Labeling functions
+```{r}
+labelAll <- function(X, C)
+{
+   n <- nrow(X);  
+   kpar <- nrow(C);
+
+   L <- matrix(nrow=n, ncol=kpar, data=0); 
+
+   for(j in 1:n) 
+   {
+     for(k in 1:kpar) L[j, k] <- exp( -sum( abs(X[j, ] - C[k, ]) ) / 2);
+     L[j, ] <- L[j, ] / sum(L[j, ]);
+   }
+  
+   return(L);
+}
+
+computeCenters <- function(X, L, kpar)
+{
+   X <- data.matrix(X);
+
+   n <- nrow(X); 
+   dpar <- ncol(X);
+  
+   centers <- matrix(nrow=kpar, ncol=dpar, data=0);
+   
+   for(k in 1:kpar)
+   {
+      wk <- 0;
+
+      for(j in 1:n) 
+      { 
+         centers[k, ] <-  centers[k, ] + L[j, k] * X[j, ]; 
+         wk <- wk + L[j, k];  
+      }
+
+      centers [k, ] <- centers [k, ] / wk;
+   }   
+
+   return(centers); 
+}
+
+kpar <- nrow(C);
+
+L <- labelAll(X, C); 
+C <- computeCenters(X, L, kpar); 
+
+L <- labelAll(X, C); 
+C <- computeCenters(X, L, kpar); 
+
+L <- labelAll(X, C); print(L);
+C <- computeCenters(X, L, kpar); print(C);
+```
+

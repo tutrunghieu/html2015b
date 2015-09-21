@@ -1,0 +1,35 @@
+# To show the concept of linearly separable
+
+## Preparation
+```{r} 
+rm(list=ls()); 
+library(nnet); 
+library(ggplot2);
+set.seed(1234);
+```
+
+## 1. Sometimes, the dataset is linearly separable
+```{r} 
+x <- runif(1000, -10, 10);
+y <- runif(1000, -10, 10);
+z <- ( 2*x + 3*y > 0);
+print( qplot(x, y, color=z) );
+
+D <- data.frame(x, y, z);
+```
+
+
+## 2. Sometimes, the dataset is linearly non-separable
+```{r} 
+x <- runif(2000, -10, 10);
+y <- runif(2000, -20, 20);
+z <- ( 0.02*x*x + 0.03*y*y < 1);
+print( qplot(x, y, color=z) );
+
+D <- data.frame(x, y, z);
+```
+
+
+
+
+

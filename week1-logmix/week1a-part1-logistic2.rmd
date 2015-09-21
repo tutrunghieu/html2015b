@@ -1,0 +1,36 @@
+# To show how logistic regression works
+
+```{r}
+rm(list=ls()); library(nnet); 
+```
+
+## 1. Creating the linear dataset
+```{r}
+ x1 <- runif(5000, -10, 10);
+ x2 <- runif(5000, -20, 20);
+ y <- (2*x1 + 3*x2 > 0);
+ y <- as.factor(y);
+
+ df <- data.frame(x1, x2, y);
+ print( qplot(x1, x2, color=y) );
+ print( head(df) );
+```
+
+## 2. Training the logistic model
+```{r}
+ mod <- multinom(y ~ x1 + x2, df);
+ print( mod );
+```
+
+## 3. Test the model on the training data
+```{r}
+ y1 <- predict(mod, subset(df, select=-c(y) ) );
+ e1 <- abs( y != y1 );
+
+print(head(data.frame( y, y1, e1 )));
+
+print(data.frame( key="Training error", val=sum(e1) ));
+
+print( table(y, y1) );
+```
+

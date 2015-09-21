@@ -1,0 +1,37 @@
+# To show the training/testing procedure
+
+```{r}
+rm(list=ls()); library(caret); cat( rep("\n", 10) );
+```
+
+## 1. Loading data
+```{r}
+x <- 1:7;
+y <- c(5, 10, 14.5, 20, 25, 31, 35)
+D <- data.frame(x, y); print( head(D) );
+```
+
+## 2. Splitting data
+```{r}
+A <- D[1:4, ]; print( head(A) );
+B <- D[5:6, ]; print( head(B) );
+```
+
+## 3. Training a linear model
+```{r}
+M <- lm(y ~ x, A); 
+print( coef(M) );
+```
+
+## 4a. Testing if the model fits the data
+```{r}
+hA = predict(M, A); 
+gA = A$y;
+print(data.frame(gnd=gA, hat=hA, err=abs(gA-hA) )); 
+```
+
+## 4b. Testing if the model can handle new input
+```{r}
+hB = predict(M, B); gB = B$y;
+print(data.frame(gnd=gB, hat=hB, err=abs(gB-hB) )); 
+```
