@@ -33,7 +33,11 @@ You have to decide the number of clusters using training / testing errors.
 
 You may have to try different seed number using set.seed(n) to figure out the numbers.
 
+### Q3. Rendering the result in HTML page
 
+You have to render the results in one html page which contains many groups (clusters).
+
+Each cluster contains many members (images).
 
 
 ### Submission 
