@@ -1,4 +1,4 @@
-# Course project 1, image clustering
+# Course project 2, image classification
 
 You are given the images inside the zip file mit8-images-64x64.zip which contains 2688 images in 8 categories. The same dataset as in project 1.
 
@@ -30,7 +30,7 @@ You have to select 30% of 2688 images in the dataset as the testing set. Then yo
 
 10 points: In your project, there must be the project file Project2.R to run your experiment. Zero point if there is not such file.
 
-10 points: There must be the report file Project2-report.docx or  Project2-report.md or Project2-report.html to report your work. Zero point if you don't have one of those files.
+10 points: There must be the report file Project2.docx or  Project2.md or Project2.html to report your work. Zero point if you don't have one of those files.
 
 10 points: There must be the result file output***.html depending on how many output files you want to produce. 
 
