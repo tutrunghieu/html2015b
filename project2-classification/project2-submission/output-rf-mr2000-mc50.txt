@@ -1,0 +1,40 @@
+-------Sliced
+[1] 2000   51
+
+       coast       forest      highway   insidecity     mountain  opencountry       street tallbuilding 
+         260          218          189          241          267          306          220          299 
+-------Splitting
+Training coin:  0.7 
+[1] 1403   51
+
+       coast       forest      highway   insidecity     mountain  opencountry       street tallbuilding 
+         182          153          133          169          187          215          154          210 
+[1] 597  51
+
+       coast       forest      highway   insidecity     mountain  opencountry       street tallbuilding 
+          78           65           56           72           80           91           66           89 
+-------Fitting
+Model size:  22 
+-------Evaluation
+              y
+y1             coast forest highway insidecity mountain opencountry street tallbuilding
+  coast          182      0       0          0        0           0      0            0
+  forest           0    153       0          0        0           0      0            0
+  highway          0      0     133          0        0           0      0            0
+  insidecity       0      0       0        169        0           0      0            1
+  mountain         0      0       0          0      187           0      0            0
+  opencountry      0      0       0          0        0         215      0            0
+  street           0      0       0          0        0           0    154            0
+  tallbuilding     0      0       0          0        0           0      0          209
+[1] 0.0007127584
+              y
+y1             coast forest highway insidecity mountain opencountry street tallbuilding
+  coast           57      0       2          0        1           2      1            4
+  forest           2     47       0          3        3           7      2            3
+  highway          5      1      48          2        3           7      0            2
+  insidecity       1      5       0         51        5           2      4            4
+  mountain         6      2       2          1       61           2      1            7
+  opencountry      3      2       3          8        3          65      2            1
+  street           0      5       0          3        0           0     55            4
+  tallbuilding     4      3       1          4        4           6      1           64
+[1] 0.2495812
